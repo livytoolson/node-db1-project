@@ -16,8 +16,19 @@ server.get('/', (req, res) => {
         })
 })
 
-server.get('/:id', (req, res) => {
+server.get('/:id', async (req, res) => {
     const { id } = req.params
+    try {
+        const [account] = await db('accounts').where({ id })
+        if (account) {
+            res.status(200).json(account)
+        } else {
+            res.status(404).json({ message: 'Message here.' })
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: 'Message here.' })
+    }
 })
 
 server.post('/', (req, res) => {
