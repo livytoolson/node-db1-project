@@ -32,13 +32,25 @@ server.get('/:id', async (req, res) => {
 })
 
 server.post('/', async (req, res) => {
+    const newAccount = req.body
+    try {
 
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: 'Message here.' })
+    }
 })
 
 server.put('/:id', async (req, res) => {
     const { id } = req.params
+    const updatedAccounts = req.body
     try {
-        
+        const count = await db('accounts').update(updatedAccounts).where({ id })
+        if (count) {
+            res.status(200).json(count)
+        } else {
+            res.status(404).json({ message: 'Message here.' })
+        }
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: 'Message here.' })
