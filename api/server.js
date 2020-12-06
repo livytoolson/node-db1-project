@@ -12,14 +12,14 @@ server.get('/', (req, res) => {
         })
         .catch(error => {
             console.log(error)
-            res.status(500).json({ message: ' ' })
+            res.status(500).json({ message: 'Message here.' })
         })
 })
 
 server.get('/:id', async (req, res) => {
     const { id } = req.params
     try {
-        const [account] = await db('accounts').where({ id })
+        const account = await db('accounts').where({ id })
         if (account) {
             res.status(200).json(account)
         } else {
@@ -31,16 +31,33 @@ server.get('/:id', async (req, res) => {
     }
 })
 
-server.post('/', (req, res) => {
+server.post('/', async (req, res) => {
 
 })
 
-server.put('/:id', (req, res) => {
+server.put('/:id', async (req, res) => {
     const { id } = req.params
+    try {
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: 'Message here.' })
+    }
 })
 
-server.delete('/:id', (req, res) => {
+server.delete('/:id', async (req, res) => {
     const { id } = req.params
+    try {
+        const count = await db('accounts').where({ id }).del()
+        if (count) {
+            res.status(200).json(count)
+        } else {
+            res.status(404).json({ messsage: 'Message here.' })
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: 'Message here.' })
+    }
 })
 
 server.use(express.json());
