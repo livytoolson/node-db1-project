@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Account = require('./account-model');
+const middlewares = require('../middlewares/account-middlewares');
 
 router.get('/', async (req, res) => {
     try {
@@ -11,7 +12,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', middlewares.validateAccountId, middlewares.validateAccount, async (req, res) => {
     const { id } = req.params
     try {
        const data = await Account.getById(id)
@@ -21,7 +22,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', middlewares.validateAccount, async (req, res) => {
     try {
         const newAccount = req.body
         const data = await Account.create(newAccount)
@@ -31,7 +32,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', middlewares.validateAccountId, async (req, res) => {
     try {
         const { id } = req.params
         const changes = req.body
@@ -42,10 +43,10 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', middlewares.validateAccountId, async (req, res) => {
     try {
         const { id } = req.params 
-        await Account.delete(id)
+        await Account.remove(id)
         res.json({ message: `Account with ID ${id} was deleted.` })
     } catch (error) {
         res.status(500).json({ message: error.message })

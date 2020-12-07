@@ -2,22 +2,32 @@
 const db = require('../../data/dbConfig');
 
 module.exports = {
-    getAll() {
-        return db('accounts');
-    },
-    getById(id) {
-        return db('accounts').where({ id }).first()
-    },
-    create(account) {
-        return db('accounts').insert(account)
-            .then((id) => {
-                return db('accounts').where({ id }).first()
-            })
-    },
-    update(id, account) {
-        return db('accounts').where({ id }).update(account)
-    },
-    delete(id) {
-        return db('accounts').where({ id }).del()
-    }
-}
+    getAll,
+    getById,
+    create,
+    update,
+    remove
+};
+
+function getAll() {
+    return db('accounts')
+};
+
+function getById(id) {
+    return db('accounts').where({ id }).first()
+};
+
+function create(account) {
+    return db('accounts').insert(account)
+        .then((id) => {
+            return db('accounts').where({ id }).first()
+        })
+};
+
+function update(id, account) {
+    return db('accounts').where({ id }).update(account)
+};
+
+function remove(id) {
+    return db('accounts').where({ id }).del()
+};
